@@ -2,8 +2,8 @@ from fastapi import Header, HTTPException, status
 import jwt
 import os
 
-SECRET_KEY = os.getenv("JWT_SECRET", "secret")
-ALGORITHM  = os.getenv("JWT_ALGORITHM", "HS256")
+SECRET_KEY = os.getenv("JWT_SECRET")
+ALGORITHM  = os.getenv("JWT_ALGORITHM")
 
 
 def verify_token(authorization: str = Header(...)) -> dict:
