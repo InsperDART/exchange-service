@@ -1,0 +1,12 @@
+name: exchange
+
+services:
+  exchange:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - EXCHANGE_SPREAD=${EXCHANGE_SPREAD}
+      - API_KEY=${EXCHANGE_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
