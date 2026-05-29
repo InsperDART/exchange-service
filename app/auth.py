@@ -1,34 +1,11 @@
 from fastapi import Header, HTTPException, status
-import jwt
-import os
 
-SECRET_KEY = os.getenv("JWT_SECRET")
-ALGORITHM  = os.getenv("JWT_ALGORITHM")
-
-
-def verify_token(authorization: str = Header(...)) -> dict:
-    """
-    Valida o Bearer JWT enviado pelo gateway.
-    Retorna o payload do token (contém o id-account / sub).
-    """
-    if not authorization.startswith("Bearer "):
+def verify_token(
+    id_account: str = Header(..., alias="id-account")
+) -> dict:
+    if not id_account:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header must start with 'Bearer '",
+            detail="Missing id-account header",
         )
-
-    token = authorization.removeprefix("Bearer ").strip()
-
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token expired",
-        )
-    except jwt.InvalidTokenError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-        )
+    return {"sub": id_account}
